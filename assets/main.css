@@ -1,0 +1,56 @@
+.my-dropdown-class .Select-control .Select-input input {
+    color: #000000; /* Couleur du texte */
+}
+.my-dropdown-class .Select-control .Select-value {
+    font-size: 20px; /* Taille du texte */
+    font-weight: bold; /* Gras du texte */
+}
+
+.my-dropdown-class .Select-control{
+    background-color: rgb(219, 225, 230);
+}
+.Select-menu-outer {
+    background-color: rgb(222, 226, 230) !important;
+}
+
+.Select-option.is-focused {
+    background-color: rgb(202, 214, 224) !important;
+}
+
+/* Pour Google Chrome, Safari et Opera */
+::-webkit-scrollbar {
+    height: 12px; /* Largeur de la barre de défilement */
+    border-radius: 10px;
+    width:10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f113; /* Couleur de fond de la barre de défilement */
+    border-radius: 10px;
+    width:10%;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #88888831; /* Couleur du curseur de défilement */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #21c9df6e; /* Couleur du curseur de défilement au survol */
+    border-radius: 10px;
+}
+
+.dash-spreadsheet-container .dash-spreadsheet-inner table {
+    border-collapse: collapse;
+    font-family: monospace;
+    --accent: transparent  !important;
+    --border: transparent !important;
+    --text-color: transparent !important;
+    --hover: transparent !important;
+    --background-color-ellipses: transparent !important;
+    --faded-text: transparent !important;
+    --faded-text-header: transparent !important;
+    --selected-background: transparent !important;
+    --faded-dropdown: transparent !important;
+    --muted: transparent !important;
+}
