@@ -5,9 +5,6 @@ import sqlite3 as sq
 import plotly.express as px
 import pandas as pd
 
-# pour les app on peut soit utiliser un fichier css externe ou alors utiliser la bibliotheque dash_bootstrap_components
-# qui contient des composants bootstrap et des themes bootstrap predefinis
-
 # initialisation des variables et autres elements dont on aura besoin
 
 # on va creer la liste des pays a partir de la base de donnees
@@ -16,7 +13,7 @@ c = conn.cursor()
 c.execute("SELECT country FROM energy")
 country_list = c.fetchall()
 country_list = [i[0] for i in country_list]
-country_list = list(set(country_list)) # on veut garder que les pays uniques et la fonction set permet de cree un set qui ne contient que des elements uniques 
+country_list = list(set(country_list)) 
 
 # recuperation des donnees pour le tableau initial
 
@@ -30,7 +27,7 @@ df2.dropna(inplace=True)
 
 conn.close()
 
-# recuperationd des fichies css externes
+# recuperation des fichies css externes
 external_stylesheets = [dbc.themes.SOLAR,
                         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/font-awesome.min.css'
                        ]
@@ -38,19 +35,6 @@ external_stylesheets = [dbc.themes.SOLAR,
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets) # on ajoute le theme boostrap SOLAR
 
 server = app.server  # expose le serveur pour Gunicorn
-
-# se rendre sur la page du theme pour voir les differentes options de theme et les classes css disponibles https://bootswatch.com/solar/
-
-# les elements html de base vont avoir des classes css bootstrap predefinis mais on peut les modifier en ajoutant style={""}
-# children est un argument spécial qui peut être utilisé pour passer des enfants de manière plus lisible que le premier argument 
-# (html.H1(children='Hello Dash') est équivalent à html.H1('Hello Dash'))
-
-# pour le layout row et column voir la doc mais en gros il faut un container qui contient des row qui contiennent des col
-# l'avantage de boostrap c'est qu'il gère le redimensionnement automatiquement, donc pas besoin de toucher à la taille des row et col
-
-
-# le layout que l'on veut c'est une sidebar a gauche et le contenu a droitem donc on va creer 2 divs, une pour la sidebar et une pour le contenu
-# le div de contenu sera rempli avec les rows et col boostrap
 
 # creation du style de la sidebar, pour quelle prenne tout le temps la meme taille et la meme position
 SIDEBAR_STYLE = {
@@ -71,9 +55,7 @@ CONTENT_STYLE = {
     "padding": "2rem 1rem",
 }
 
-# creation de la sidebar, qui est enfait un div qui va contenir notamment un navbar boostrap
-# voir doc offCanvas si on veut une sidebar qui se cache et se montre quand on clique sur un bouton
-# ca peut aussi marcher pour d autres elements que la sidebar
+# creation de la sidebar
 sidebar = html.Div(
     [
         html.H1("World energy", className="display-6",style = {"color":"white"}), # display-4 est une classe boostrap qui permet de mettre le texte en plus gros par rapport a un h1 normal
@@ -121,19 +103,18 @@ sidebar = html.Div(
     style=SIDEBAR_STYLE,
 )
 
+# reste du contenu qui sera actualisé en fonction de l'url
 content = html.Div(id="page-content", style=CONTENT_STYLE)
 
+# layout de l'appli
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 
 
 # gestion du rendu des pages en fonction de l'url
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
-
-# pour mettre du code python pour creer des variables ou autre, il faut le faire dans une fonction
 def render_page_content(pathname):
     
     if pathname == "/":
-        # premiere page, c'est un div qui contient des row et des col boostrap
         return html.Div([
             dbc.InputGroup([
                  dcc.Dropdown(
@@ -143,10 +124,9 @@ def render_page_content(pathname):
                     value='France',
                     placeholder="Choose a country...",
                     style={"width":"100%","border-radius":"8px"},
-                    className='my-dropdown-class' # besoin de css externe pour les elements dcc
+                    className='my-dropdown-class' 
                 )
             ],style = {"width":"40%","min-width":"250px"}),
-            # la taille de la row est automatiquement ajustee par boostrap en fonction de la taille de son contenu
             dbc.Row([
                dbc.Col(html.Div([
                             html.Div("Total energy consumption", className="card-header",style = {"color":"white"}),
@@ -158,10 +138,6 @@ def render_page_content(pathname):
                     ], style = {"margin-top":"2rem"}),
             html.Div(
                 dbc.Row([
-               # md permet de dire que la col prendra 4/12 de la largeur de l'ecran pour les ecrans de taille moyenne
-               # xs permet de dire que la col prendra 12/12 de la largeur de l'ecran pour les ecrans de petite taille
-               # avec boostrap la largeur max attribuable a une col est 12, 3 colonnes avec md=4 va les repartir uniformement sur la ligne'
-               # avec un padding par defaut de 15px entre les col
                     dbc.Col(html.Div([
                                 html.Div(dcc.Graph(id='graph2',config={'responsive': True},style={"width": "100%", "height": "100%",'display': 'none'}),
                                         className="card-body text-white",style = {"height":"100%","background-color":"#2b7570","border-radius":"7px","box-shadow": "rgba(99, 99, 99, 0.6) 0px 1px 4px 0px"}),
@@ -230,7 +206,7 @@ def render_page_content(pathname):
                     value='France',
                     placeholder="Choose a country...",
                     style={"width":"100%","border-radius":"8px"},
-                    className='my-dropdown-class' # besoin de css externe pour les elements dcc
+                    className='my-dropdown-class'
                 )
             ],style = {"width":"40%","min-width":"250px"}),
              dbc.Row([
@@ -288,7 +264,6 @@ def render_page_content(pathname):
         ],
         className="p-3 bg-light rounded-3",
     )
-
 
 # gestion de l'apparission de la sidebar quand on clique sur le bouton
 @app.callback(
@@ -403,9 +378,6 @@ def update_output(selected_country):
                     )
         }
     )
-
-    # Créez le graphique avec les données filtrées
-    # pour le graphique 3 faire comme le 2 mais avec la production d'electricite en categorie, peut etre faire un pie chart plutot qu'un barplot
 
     # creation de la figure 3
     df5 = pd.DataFrame(c.execute("SELECT sum(biofuel_electricity), sum(coal_electricity), sum(fossil_electricity), sum(gas_electricity), sum(hydro_electricity), sum(nuclear_electricity), sum(oil_electricity), sum(solar_electricity), sum(wind_electricity) FROM energy WHERE country = '{}' group by country".format(selected_country)).fetchall())
