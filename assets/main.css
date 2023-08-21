@@ -54,3 +54,55 @@
     --faded-dropdown: transparent !important;
     --muted: transparent !important;
 }
+
+.content-hidden {
+    margin-left: 18rem;
+    margin-right: 2rem;
+    padding: 2rem 1rem;
+}
+
+.sidebar-hidden {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 17rem;
+    padding: 2rem 1rem;
+    background-color: #2b7570;
+}
+
+.soustitre {
+    color:white;
+}
+
+@media (max-width: 768px) {
+    .sidebar-hidden {
+        width: 100vw;
+        height:5rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 2rem 1rem;
+        background-color: #2b7570;
+    }
+    .content-hidden {
+        margin-left: 2rem;
+        margin-top: 6rem;
+    }
+    .soustitre {
+        opacity: 0;
+    }
+    .logogithub {
+        display:none;
+    }
+    .linkedin {
+        display:none;
+    }
+    .info {
+        display:none;
+    }
+    .nav-hidden {
+        display: none;
+    }
+  }
